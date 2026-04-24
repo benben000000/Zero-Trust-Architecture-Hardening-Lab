@@ -41,6 +41,20 @@
         enabled: yes
         state: started
 
+    - name: Simulate Splunk Universal Forwarder Installation
+      file:
+        path: /opt/splunkforwarder
+        state: directory
+        mode: '0755'
+
+    - name: Configure inputs.conf for Auditd monitoring
+      copy:
+        dest: /opt/splunkforwarder/inputs.conf
+        content: |
+          [monitor:///var/log/audit/audit.log]
+          disabled = false
+          index = security
+          sourcetype = linux_audit
   handlers:
     - name: Restart SSHD
       service:
